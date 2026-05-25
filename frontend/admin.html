@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Re:flect — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --pink:#FE6077; --lime:#B3D042; --cream:#F6E9D8; --navy:#154A61; --white:#FFFFFF; --gray:#f0f0f0; }
+    body { font-family: 'Nunito', sans-serif; background: #f5f5f5; color: var(--navy); }
+
+    /* бокова панель */
+    .layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+    aside {
+      background: var(--navy); color: var(--cream); padding: 32px 20px;
+      position: sticky; top: 0; height: 100vh;
+    }
+    .aside-logo { font-size: 1.4rem; font-weight: 900; margin-bottom: 8px; }
+    .aside-logo span { color: var(--pink); }
+    .aside-sub { font-size: 0.7rem; font-weight: 800; opacity: 0.4; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 32px; }
+    aside nav a {
+      display: block; padding: 10px 14px; border-radius: 12px;
+      color: var(--cream); text-decoration: none; font-weight: 800;
+      font-size: 0.9rem; margin-bottom: 4px; opacity: 0.6; transition: all 0.2s;
+    }
+    aside nav a:hover, aside nav a.active { opacity: 1; background: rgba(255,255,255,0.1); }
+    .aside-back { margin-top: auto; display: block; padding: 10px 14px; border-radius: 12px; color: var(--lime); text-decoration: none; font-weight: 800; font-size: 0.85rem; opacity: 0.8; }
+
+    /* основний контент */
+    main { padding: 40px 48px; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    h1 { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; }
+    .page-sub { font-size: 0.85rem; font-weight: 800; opacity: 0.45; margin-bottom: 32px; }
+
+    /* картки з даними */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .card {
+      background: var(--white); border-radius: 16px; padding: 20px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    .card-color { width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0; }
+    .card-info { flex: 1; }
+    .card-name { font-weight: 900; font-size: 0.95rem; }
+    .card-sub { font-size: 0.8rem; font-weight: 800; opacity: 0.45; }
+    .card-actions { display: flex; gap: 8px; }
+    .btn-icon {
+      width: 32px; height: 32px; border-radius: 8px; border: none;
+      cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .btn-edit { background: var(--cream); color: var(--navy); }
+    .btn-edit:hover { background: var(--lime); }
+    .btn-del { background: #ffe0e4; color: var(--pink); }
+    .btn-del:hover { background: var(--pink); color: var(--white); }
+
+    /* форми */
+    .form-box { background: var(--white); border-radius: 20px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); max-width: 560px; }
+    .form-box h2 { font-size: 1.1rem; font-weight: 900; margin-bottom: 20px; }
+    label { display: block; font-size: 0.8rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; opacity: 0.5; margin-bottom: 6px; margin-top: 16px; }
+    input[type=text], input[type=color], textarea, select {
+      width: 100%; padding: 12px 16px; border-radius: 12px;
+      border: 2px solid var(--gray); font-family: inherit; font-weight: 800; font-size: 0.9rem;
+      color: var(--navy); outline: none; transition: border 0.2s;
+    }
+    input[type=text]:focus, textarea:focus { border-color: var(--navy); }
+    input[type=color] { height: 48px; padding: 4px 8px; cursor: pointer; }
+    textarea { resize: vertical; min-height: 80px; }
+    .btn-submit {
+      margin-top: 20px; padding: 12px 28px; border-radius: 100px; border: none;
+      background: var(--navy); color: var(--cream); font-family: inherit;
+      font-weight: 900; font-size: 0.9rem; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-submit:hover { background: var(--pink); }
+    .btn-cancel {
+      margin-top: 20px; margin-left: 10px; padding: 12px 20px; border-radius: 100px;
+      border: 2px solid var(--gray); background: transparent; font-family: inherit;
+      font-weight: 900; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-cancel:hover { border-color: var(--navy); }
+
+    /* список мокапів */
+    .mockup-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .mockup-item { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+    .mockup-item img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+    .mockup-item-info { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .mockup-item-name { font-weight: 900; font-size: 0.85rem; }
+
+    /* сповіщення */
+    .toast {
+      position: fixed; bottom: 32px; right: 32px;
+      background: var(--navy); color: var(--cream);
+      padding: 14px 24px; border-radius: 14px;
+      font-weight: 900; font-size: 0.85rem;
+      opacity: 0; transform: translateY(10px);
+      transition: all 0.3s; pointer-events: none; z-index: 999;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: var(--lime); color: var(--navy); }
+    .toast.error { background: var(--pink); color: var(--white); }
+  </style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- бокова панель -->
+  <aside>
+    <div class="aside-logo"><span>Re:</span>flect</div>
+    <div class="aside-sub">Admin Panel</div>
+    <nav>
+      <a href="#" class="active" onclick="showPage('brand', this)">🏷 Brand Info</a>
+      <a href="#" onclick="showPage('colors', this)">🎨 Colors</a>
+      <a href="#" onclick="showPage('fonts', this)">🔤 Fonts</a>
+      <a href="#" onclick="showPage('mockups', this)">🖼 Mockups</a>
+      <a href="#" onclick="showPage('slogans', this)">💬 Slogans</a>
+    </nav>
+    <a class="aside-back" href="/">← Back to site</a>
+  </aside>
+
+  <!-- сторінки -->
+  <main>
+
+    <!-- інфо бренду -->
+    <div class="page active" id="page-brand">
+      <h1>Brand Info</h1>
+      <p class="page-sub">Основна інформація про бренд</p>
+      <div class="form-box">
+        <h2>Edit brand details</h2>
+        <label>Brand name</label>
+        <input type="text" id="b-name" />
+        <label>Tagline</label>
+        <input type="text" id="b-tagline" />
+        <label>About text</label>
+        <textarea id="b-about" rows="4"></textarea>
+        <button class="btn-submit" onclick="saveBrand()">Save changes</button>
+      </div>
+    </div>
+
+    <!-- кольори -->
+    <div class="page" id="page-colors">
+      <h1>Colors</h1>
+      <p class="page-sub">Кольорова палітра бренду</p>
+      <div class="cards" id="colors-list"></div>
+      <div class="form-box" id="color-form">
+        <h2 id="color-form-title">Add color</h2>
+        <input type="hidden" id="c-id" />
+        <label>Name</label>
+        <input type="text" id="c-name" placeholder="Coral Wave" />
+        <label>HEX</label>
+        <div style="display:flex;gap:12px;align-items:center">
+          <input type="color" id="c-hex-picker" style="width:60px" />
+          <input type="text" id="c-hex" placeholder="#FE6077" style="flex:1" />
+        </div>
+        <label>Label (optional)</label>
+        <input type="text" id="c-label" placeholder="Основний акцент" />
+        <button class="btn-submit" onclick="saveColor()">Save</button>
+        <button class="btn-cancel" onclick="resetColorForm()">Cancel</button>
+      </div>
+    </div>
+
+    <!-- шрифти -->
+    <div class="page" id="page-fonts">
+      <h1>Fonts</h1>
+      <p class="page-sub">Типографіка бренду</p>
+      <div class="cards" id="fonts-list"></div>
+    </div>
+
+    <!-- мокапи -->
+    <div class="page" id="page-mockups">
+      <h1>Mockups</h1>
+      <p class="page-sub">Застосування айдентики</p>
+      <div class="mockup-list" id="mockups-list"></div>
+      <div class="form-box">
+        <h2>Upload new mockup</h2>
+        <label>Title</label>
+        <input type="text" id="m-title" placeholder="Street Poster" />
+        <label>Category</label>
+        <select id="m-category">
+          <option value="print">Print</option>
+          <option value="apparel">Apparel</option>
+          <option value="packaging">Packaging</option>
+          <option value="outdoor">Outdoor</option>
+          <option value="digital">Digital</option>
+        </select>
+        <label>Image file</label>
+        <input type="file" id="m-file" accept="image/*" style="padding:8px" />
+        <button class="btn-submit" onclick="uploadMockup()">Upload</button>
+      </div>
+    </div>
+
+    <!-- слогани -->
+    <div class="page" id="page-slogans">
+      <h1>Slogans</h1>
+      <p class="page-sub">Слогани бренду</p>
+      <div class="cards" id="slogans-list"></div>
+      <div class="form-box">
+        <h2>Add slogan</h2>
+        <label>Text</label>
+        <input type="text" id="s-text" placeholder="Everything deserves a second wave." />
+        <label>Status</label>
+        <select id="s-active">
+          <option value="1">Active (shown on site)</option>
+          <option value="0">Hidden</option>
+        </select>
+        <button class="btn-submit" onclick="addSlogan()">Add</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- сповіщення -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // перемикаємо сторінки в адмінці
+  function showPage(name, link) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('aside nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    link.classList.add('active');
+    loadPage(name);
+  }
+
+  function toast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast show ' + type;
+    setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  // --- BRAND ---
+  async function loadBrand() {
+    const d = await fetch('/api/brand').then(r => r.json());
+    document.getElementById('b-name').value    = d.info.name;
+    document.getElementById('b-tagline').value = d.info.tagline;
+    document.getElementById('b-about').value   = d.info.about;
+  }
+  async function saveBrand() {
+    await fetch('/api/brand', {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name: document.getElementById('b-name').value, tagline: document.getElementById('b-tagline').value, about: document.getElementById('b-about').value })
+    });
+    toast('Brand info saved ✓');
+  }
+
+  // --- COLORS ---
+  async function loadColors() {
+    const colors = await fetch('/api/colors').then(r => r.json());
+    document.getElementById('colors-list').innerHTML = colors.map(c => `
+      <div class="card">
+        <div class="card-color" style="background:${c.hex}"></div>
+        <div class="card-info">
+          <div class="card-name">${c.name}</div>
+          <div class="card-sub">${c.hex} · ${c.label || ''}</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-icon btn-edit" onclick="editColor(${c.id},'${c.name}','${c.hex}','${c.label||''}')">✏️</button>
+          <button class="btn-icon btn-del" onclick="deleteColor(${c.id})">🗑</button>
+        </div>
+      </div>`).join('');
+  }
+  function editColor(id, name, hex, label) {
+    document.getElementById('c-id').value = id;
+    document.getElementById('c-name').value = name;
+    document.getElementById('c-hex').value = hex;
+    document.getElementById('c-hex-picker').value = hex;
+    document.getElementById('c-label').value = label;
+    document.getElementById('color-form-title').textContent = 'Edit color';
+    document.getElementById('color-form').scrollIntoView({ behavior: 'smooth' });
+  }
+  function resetColorForm() {
+    document.getElementById('c-id').value = '';
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-hex').value = '';
+    document.getElementById('c-label').value = '';
+    document.getElementById('color-form-title').textContent = 'Add color';
+  }
+  async function saveColor() {
+    const id  = document.getElementById('c-id').value;
+    const hex = document.getElementById('c-hex').value || document.getElementById('c-hex-picker').value;
+    const body = { name: document.getElementById('c-name').value, hex, label: document.getElementById('c-label').value };
+    if (id) {
+      await fetch('/api/colors/' + id, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+      toast('Color updated ✓');
+    } else {
+      await fetch('/api/colors', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+      toast('Color added ✓');
+    }
+    resetColorForm();
+    loadColors();
+  }
+  async function deleteColor(id) {
+    if (!confirm('Delete this color?')) return;
+    await fetch('/api/colors/' + id, { method: 'DELETE' });
+    toast('Deleted', 'error');
+    loadColors();
+  }
+  // синхронізуємо пікер і текстове поле
+  document.getElementById('c-hex-picker').addEventListener('input', e => { document.getElementById('c-hex').value = e.target.value; });
+  document.getElementById('c-hex').addEventListener('input', e => {
+    if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) document.getElementById('c-hex-picker').value = e.target.value;
+  });
+
+  // --- FONTS ---
+  async function loadFonts() {
+    const fonts = await fetch('/api/brand').then(r => r.json()).then(d => d.fonts);
+    document.getElementById('fonts-list').innerHTML = fonts.map(f => `
+      <div class="card">
+        <div class="card-info">
+          <div class="card-name">${f.name}</div>
+          <div class="card-sub">${f.weight} · ${f.usage}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // --- MOCKUPS ---
+  async function loadMockups() {
+    const mockups = await fetch('/api/mockups').then(r => r.json());
+    document.getElementById('mockups-list').innerHTML = mockups.map(m => `
+      <div class="mockup-item">
+        <img src="${m.image_path}" alt="${m.title}" />
+        <div class="mockup-item-info">
+          <span class="mockup-item-name">${m.title}</span>
+          <button class="btn-icon btn-del" onclick="deleteMockup(${m.id})">🗑</button>
+        </div>
+      </div>`).join('');
+  }
+  async function uploadMockup() {
+    const form = new FormData();
+    form.append('title',    document.getElementById('m-title').value);
+    form.append('category', document.getElementById('m-category').value);
+    form.append('image',    document.getElementById('m-file').files[0]);
+    await fetch('/api/mockups', { method: 'POST', body: form });
+    toast('Mockup uploaded ✓');
+    loadMockups();
+  }
+  async function deleteMockup(id) {
+    if (!confirm('Delete this mockup?')) return;
+    await fetch('/api/mockups/' + id, { method: 'DELETE' });
+    toast('Deleted', 'error');
+    loadMockups();
+  }
+
+  // --- SLOGANS ---
+  async function loadSlogans() {
+    const slogans = await fetch('/api/slogans').then(r => r.json());
+    document.getElementById('slogans-list').innerHTML = slogans.map(s => `
+      <div class="card">
+        <div class="card-info">
+          <div class="card-name">${s.text}</div>
+          <div class="card-sub">${s.is_active ? '✅ Active' : '⛔ Hidden'}</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-icon btn-edit" onclick="toggleSlogan(${s.id}, ${s.is_active})">${s.is_active ? '🙈' : '👁'}</button>
+          <button class="btn-icon btn-del" onclick="deleteSlogan(${s.id})">🗑</button>
+        </div>
+      </div>`).join('');
+  }
+  async function addSlogan() {
+    const text = document.getElementById('s-text').value;
+    const is_active = document.getElementById('s-active').value;
+    await fetch('/api/slogans', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ text, is_active }) });
+    toast('Slogan added ✓');
+    document.getElementById('s-text').value = '';
+    loadSlogans();
+  }
+  async function toggleSlogan(id, current) {
+    await fetch('/api/slogans/' + id, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ text: '', is_active: current ? 0 : 1 })
+    });
+    loadSlogans();
+  }
+  async function deleteSlogan(id) {
+    if (!confirm('Delete this slogan?')) return;
+    await fetch('/api/slogans/' + id, { method: 'DELETE' });
+    toast('Deleted', 'error');
+    loadSlogans();
+  }
+
+  // завантажуємо потрібну секцію при переключенні
+  function loadPage(name) {
+    if (name === 'brand')   loadBrand();
+    if (name === 'colors')  loadColors();
+    if (name === 'fonts')   loadFonts();
+    if (name === 'mockups') loadMockups();
+    if (name === 'slogans') loadSlogans();
+  }
+
+  // стартуємо з першої сторінки
+  loadBrand();
+</script>
+</body>
+</html>

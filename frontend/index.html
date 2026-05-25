@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Re:flect — Brand Identity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --pink:  #FE6077;
+      --lime:  #B3D042;
+      --cream: #F6E9D8;
+      --navy:  #154A61;
+      --white: #FFFFFF;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--navy); overflow-x: hidden; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 48px;
+      background: rgba(246,233,216,0.88); backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid rgba(21,74,97,0.08);
+    }
+    .nav-logo { font-size: 1.3rem; font-weight: 900; color: var(--navy); letter-spacing: -0.5px; }
+    .nav-logo span { color: var(--pink); }
+    nav ul { list-style: none; display: flex; gap: 36px; }
+    nav ul a {
+      text-decoration: none; font-weight: 800; font-size: 0.85rem;
+      color: var(--navy); letter-spacing: 0.5px; text-transform: uppercase;
+      opacity: 0.7; transition: opacity 0.2s;
+    }
+    nav ul a:hover { opacity: 1; }
+    .nav-admin {
+      font-size: 0.75rem; font-weight: 900; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--pink); text-decoration: none;
+      border: 1.5px solid var(--pink); padding: 6px 16px; border-radius: 100px;
+      transition: all 0.2s;
+    }
+    .nav-admin:hover { background: var(--pink); color: var(--white); }
+
+    section { padding: 120px 48px; }
+    .label { font-size: 0.75rem; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; opacity: 0.45; margin-bottom: 20px; }
+    .section-heading { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 900; line-height: 1; letter-spacing: -1.5px; margin-bottom: 12px; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+      padding: 0 48px; background: var(--navy); color: var(--cream);
+      position: relative; overflow: hidden;
+    }
+    .hero-tag { font-size: 0.8rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: var(--lime); margin-bottom: 28px; }
+    .hero-title { font-size: clamp(3.5rem, 8vw, 7rem); font-weight: 900; line-height: 0.95; letter-spacing: -2px; margin-bottom: 32px; }
+    .hero-title .re { color: var(--pink); }
+    .hero-title .colon { color: var(--lime); }
+    .hero-sub { font-size: 1.1rem; font-weight: 800; opacity: 0.55; max-width: 480px; line-height: 1.6; }
+    .hero-scroll { position: absolute; bottom: 40px; left: 48px; font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--cream); opacity: 0.35; display: flex; align-items: center; gap: 10px; }
+    .hero-scroll::before { content: ''; display: block; width: 40px; height: 1.5px; background: var(--cream); opacity: 0.5; }
+    .wave-logo-hero { position: absolute; right: 8vw; top: 50%; transform: translateY(-50%); width: min(380px, 35vw); animation: float 5s ease-in-out infinite; }
+    @keyframes float { 0%,100% { transform: translateY(-50%) translateY(0); } 50% { transform: translateY(-50%) translateY(-18px); } }
+
+    /* ABOUT */
+    #about { background: var(--cream); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .about-heading { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 900; line-height: 1.1; letter-spacing: -1px; margin-bottom: 24px; }
+    .about-text { font-size: 1rem; font-weight: 800; line-height: 1.75; opacity: 0.65; }
+    .pill-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .pill { padding: 10px 22px; border-radius: 100px; font-weight: 900; font-size: 0.85rem; }
+    .pill-pink { background: var(--pink); color: var(--white); }
+    .pill-lime { background: var(--lime); color: var(--navy); }
+    .pill-navy { background: var(--navy); color: var(--cream); }
+    .pill-outline { background: transparent; border: 2px solid var(--navy); color: var(--navy); }
+
+    /* LOGO */
+    #logo { background: var(--white); }
+    .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+    .logo-card { border-radius: 24px; overflow: hidden; transition: transform 0.35s cubic-bezier(.16,1,.3,1); }
+    .logo-card:hover { transform: scale(1.02); }
+    .logo-card img { width: 100%; display: block; }
+    .logo-card.dark { background: var(--navy); }
+    .logo-card.light { background: var(--cream); }
+
+    /* COLORS */
+    #colors { background: var(--navy); color: var(--cream); }
+    #colors .label { color: var(--lime); }
+    .colors-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+    .color-swatch { border-radius: 20px; overflow: hidden; cursor: pointer; transition: transform 0.3s cubic-bezier(.16,1,.3,1); }
+    .color-swatch:hover { transform: translateY(-8px); }
+    .swatch-block { height: 220px; }
+    .swatch-info { padding: 20px; background: rgba(255,255,255,0.06); }
+    .swatch-name { font-weight: 900; font-size: 0.9rem; margin-bottom: 6px; }
+    .swatch-hex { font-size: 0.8rem; font-weight: 800; opacity: 0.5; letter-spacing: 1px; }
+
+    /* TYPOGRAPHY */
+    #typography { background: var(--cream); }
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 48px; }
+    .type-card { background: var(--white); border-radius: 24px; padding: 48px; transition: transform 0.35s cubic-bezier(.16,1,.3,1); }
+    .type-card:hover { transform: translateY(-6px); }
+    .type-sample-large { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1; margin-bottom: 20px; color: var(--navy); }
+    .type-name { font-size: 0.8rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--navy); opacity: 0.4; margin-bottom: 8px; }
+    .type-desc { font-size: 0.85rem; font-weight: 800; opacity: 0.5; line-height: 1.6; }
+    .type-alphabet { margin-top: 20px; font-size: 0.9rem; font-weight: 900; color: var(--navy); opacity: 0.25; letter-spacing: 2px; }
+
+    /* MOCKUPS */
+    #mockups { background: var(--pink); color: var(--white); }
+    #mockups .label { color: var(--cream); opacity: 0.7; }
+    #mockups .section-heading { color: var(--white); }
+    .mockups-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
+    .mockup-card { border-radius: 20px; overflow: hidden; cursor: pointer; position: relative; transition: transform 0.35s cubic-bezier(.16,1,.3,1), box-shadow 0.35s; }
+    .mockup-card:hover { transform: scale(1.03); box-shadow: 0 24px 60px rgba(0,0,0,0.25); }
+    .mockup-card img { width: 100%; display: block; aspect-ratio: 16/10; object-fit: cover; }
+    .mockup-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(21,74,97,0.7) 0%, transparent 50%); opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 20px; }
+    .mockup-card:hover .mockup-overlay { opacity: 1; }
+    .mockup-label-tag { font-size: 0.85rem; font-weight: 900; color: var(--cream); letter-spacing: 1px; text-transform: uppercase; }
+    .mockup-card.wide { grid-column: span 2; }
+
+    /* SLOGAN */
+    #slogan { background: var(--lime); padding: 80px 48px; text-align: center; }
+    .slogan-text { font-size: clamp(2rem, 6vw, 5rem); font-weight: 900; color: var(--navy); letter-spacing: -2px; line-height: 1; }
+    .slogan-text em { color: var(--white); font-style: normal; }
+
+    /* FOOTER */
+    footer { background: var(--navy); color: var(--cream); padding: 60px 48px; display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-size: 1.8rem; font-weight: 900; letter-spacing: -0.5px; }
+    .footer-logo span { color: var(--pink); }
+    .footer-sub { font-size: 0.8rem; font-weight: 800; opacity: 0.4; margin-top: 8px; }
+    .footer-right { text-align: right; font-size: 0.8rem; font-weight: 800; opacity: 0.4; line-height: 1.8; }
+
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(.16,1,.3,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      section { padding: 80px 24px; }
+      nav { padding: 16px 24px; }
+      nav ul { gap: 16px; }
+      #about { grid-template-columns: 1fr; gap: 40px; }
+      .logo-grid, .type-grid { grid-template-columns: 1fr; }
+      .colors-grid { grid-template-columns: repeat(2,1fr); }
+      .mockups-grid { grid-template-columns: 1fr; }
+      .mockup-card.wide { grid-column: span 1; }
+      .wave-logo-hero { display: none; }
+      footer { flex-direction: column; gap: 24px; text-align: center; }
+      .footer-right { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span>Re:</span>flect</div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#logo">Logo</a></li>
+    <li><a href="#colors">Colors</a></li>
+    <li><a href="#typography">Type</a></li>
+    <li><a href="#mockups">Mockups</a></li>
+  </ul>
+  <a class="nav-admin" href="/admin.html">Admin</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-tag">Brand Identity System · 2025</div>
+  <h1 class="hero-title"><span class="re">Re</span><span class="colon">:</span>flect</h1>
+  <p class="hero-sub" id="hero-tagline">Second Life. First Impact.</p>
+  <div class="hero-scroll">Scroll to explore</div>
+  <img class="wave-logo-hero" src="images/logo-main.png" alt="Re:flect logo" />
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <div class="label">About the brand</div>
+    <h2 class="about-heading">Upcycled fashion.<br/>New meaning.</h2>
+    <p class="about-text" id="about-text">Loading...</p>
+    <div class="pill-list">
+      <span class="pill pill-pink">Upcycled</span>
+      <span class="pill pill-lime">Made in Ukraine</span>
+      <span class="pill pill-navy">100% Handmade</span>
+      <span class="pill pill-outline">Sustainable</span>
+    </div>
+  </div>
+  <div class="reveal" style="transition-delay:0.15s">
+    <div class="label">Identity principles</div>
+    <h2 class="about-heading">Flexible.<br/>Bold.<br/>Tactile.</h2>
+    <p class="about-text">The identity was designed to be flexible, unlike typical eco-aesthetics — emotional, alive, and tactile. The wave symbol reflects the brand's core: everything deserves a second wave.</p>
+  </div>
+</section>
+
+<!-- LOGO -->
+<section id="logo">
+  <div class="label reveal">Logo system</div>
+  <h2 class="section-heading reveal">The mark</h2>
+  <div class="logo-grid">
+    <div class="logo-card light reveal" style="transition-delay:0.1s"><img src="images/logo-main.png" alt="Primary logo" /></div>
+    <div class="logo-card dark reveal" style="transition-delay:0.2s"><img src="images/logo-variants.png" alt="Logo variants" /></div>
+  </div>
+</section>
+
+<!-- COLORS -->
+<section id="colors">
+  <div class="label reveal">Color palette</div>
+  <h2 class="section-heading reveal" style="color:var(--cream)">Four<br/>core colors</h2>
+  <!-- кольори підвантажуються з API -->
+  <div class="colors-grid" id="colors-grid"></div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section id="typography">
+  <div class="label reveal">Typography</div>
+  <h2 class="section-heading reveal">Type system</h2>
+  <!-- шрифти підвантажуються з API -->
+  <div class="type-grid" id="type-grid"></div>
+</section>
+
+<!-- MOCKUPS -->
+<section id="mockups">
+  <div class="label reveal">Brand applications</div>
+  <h2 class="section-heading reveal">Identity<br/>in the wild</h2>
+  <!-- мокапи підвантажуються з API -->
+  <div class="mockups-grid" id="mockups-grid"></div>
+</section>
+
+<!-- SLOGAN -->
+<section id="slogan">
+  <p class="slogan-text reveal" id="slogan-text">Everything<br/>deserves<br/><em>a second wave.</em></p>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-logo"><span>Re:</span>flect</div>
+    <div class="footer-sub" id="footer-tagline">Brand Identity System · 2025</div>
+  </div>
+  <div class="footer-right">
+    Designed by Nazarenko Masha<br/>
+    100% Handmade · Made in Ukraine<br/>
+    Second Life. First Impact.
+  </div>
+</footer>
+
+<script>
+  // анімація появи елементів при скролі
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // підвантажуємо всі дані з сервера
+  async function loadBrand() {
+    const data = await fetch('/api/brand').then(r => r.json());
+
+    // заголовок і опис
+    document.getElementById('hero-tagline').textContent = data.info.tagline;
+    document.getElementById('about-text').textContent = data.info.about;
+    document.getElementById('footer-tagline').textContent = data.info.tagline + ' · 2025';
+
+    // кольори
+    const colorsGrid = document.getElementById('colors-grid');
+    colorsGrid.innerHTML = data.colors.map((c, i) => `
+      <div class="color-swatch reveal" style="transition-delay:${i * 0.05}s">
+        <div class="swatch-block" style="background:${c.hex}"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">${c.name}</div>
+          <div class="swatch-hex">${c.hex}</div>
+        </div>
+      </div>`).join('');
+    colorsGrid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // шрифти
+    const typeGrid = document.getElementById('type-grid');
+    typeGrid.innerHTML = data.fonts.map((f, i) => `
+      <div class="type-card reveal" style="transition-delay:${i * 0.1}s">
+        <div class="type-name">${i === 0 ? 'Primary' : 'Secondary'} · ${f.name}</div>
+        <div class="type-sample-large">Aa Bb Cc</div>
+        <div class="type-desc">${f.name} ${f.weight}<br/>${f.usage}</div>
+        <div class="type-alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br/>abcdefghijklmnopqrstuvwxyz<br/>0123456789</div>
+      </div>`).join('');
+    typeGrid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // мокапи (перший і передостанній широкі)
+    const mockupsGrid = document.getElementById('mockups-grid');
+    mockupsGrid.innerHTML = data.mockups.map((m, i) => {
+      const wide = (i === 0 || i === data.mockups.length - 2) ? 'wide' : '';
+      return `
+        <div class="mockup-card ${wide} reveal" style="transition-delay:${i * 0.05}s">
+          <img src="${m.image_path}" alt="${m.title}" />
+          <div class="mockup-overlay"><span class="mockup-label-tag">${m.title}</span></div>
+        </div>`;
+    }).join('');
+    mockupsGrid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // активний слоган
+    if (data.slogans.length > 1) {
+      const s = data.slogans[1];
+      const parts = s.text.split(' ');
+      const mid = Math.floor(parts.length / 2);
+      document.getElementById('slogan-text').innerHTML =
+        parts.slice(0, mid).join(' ') + '<br/>' + parts.slice(mid).join(' ');
+    }
+  }
+
+  loadBrand();
+</script>
+</body>
+</html>

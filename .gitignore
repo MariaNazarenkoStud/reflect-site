@@ -1,0 +1,4 @@
+node_modules/
+backend/brand.db
+backend/pdf_pages/
+*.DS_Store
