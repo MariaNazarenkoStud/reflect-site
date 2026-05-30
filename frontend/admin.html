@@ -154,10 +154,56 @@
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast.success { background: var(--lime); color: var(--navy); }
     .toast.error { background: var(--pink); color: var(--white); }
+
+    /* логін */
+    #login-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: #f5f5f5;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .login-card {
+      background: var(--white); border-radius: 24px;
+      padding: 40px 48px; width: 360px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+    }
+    .login-logo { font-size: 1.8rem; font-weight: 900; margin-bottom: 4px; }
+    .login-logo span { color: var(--pink); }
+    .login-sub { font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; opacity: 0.35; margin-bottom: 32px; }
+    .login-card label { margin-top: 0; margin-bottom: 8px; }
+    .login-card input[type=password] {
+      width: 100%; padding: 14px 16px; border-radius: 12px;
+      border: 2px solid var(--gray); font-family: inherit;
+      font-weight: 800; font-size: 1rem; color: var(--navy);
+      outline: none; transition: border 0.2s; margin-bottom: 8px;
+    }
+    .login-card input[type=password]:focus { border-color: var(--navy); }
+    .login-error { font-size: 0.8rem; font-weight: 900; color: var(--pink); min-height: 20px; margin-bottom: 8px; }
+    .login-btn {
+      width: 100%; padding: 14px; border-radius: 100px; border: none;
+      background: var(--navy); color: var(--cream);
+      font-family: inherit; font-weight: 900; font-size: 0.95rem;
+      cursor: pointer; transition: background 0.2s; margin-top: 4px;
+    }
+    .login-btn:hover { background: var(--pink); }
   </style>
 </head>
 <body>
-<div class="layout">
+
+<!-- логін-екран -->
+<div id="login-overlay">
+  <div class="login-card">
+    <div class="login-logo"><span>Re:</span>flect</div>
+    <div class="login-sub">Admin Panel</div>
+    <form onsubmit="login(event)">
+      <label>Пароль</label>
+      <input type="password" id="login-password" placeholder="••••••••" autofocus />
+      <div id="login-error" class="login-error"></div>
+      <button type="submit" class="login-btn">Увійти →</button>
+    </form>
+  </div>
+</div>
+
+<div class="layout" id="main-layout" style="display:none">
 
   <aside>
     <div class="aside-logo"><span>Re:</span>flect</div>
@@ -556,7 +602,50 @@
     map[name]?.();
   }
 
-  loadOrders();
+  // --- AUTH ---
+  async function checkAuth() {
+    const token = localStorage.getItem('reflect_admin_token');
+    if (!token) return showLogin();
+    const res = await fetch('/api/auth/check', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if (res.ok) {
+      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('main-layout').style.display  = 'grid';
+      loadOrders();
+    } else {
+      localStorage.removeItem('reflect_admin_token');
+      showLogin();
+    }
+  }
+
+  function showLogin() {
+    document.getElementById('login-overlay').style.display = 'flex';
+    document.getElementById('main-layout').style.display   = 'none';
+  }
+
+  async function login(e) {
+    e.preventDefault();
+    const password = document.getElementById('login-password').value;
+    const errEl    = document.getElementById('login-error');
+    errEl.textContent = '';
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    if (res.ok) {
+      const { token } = await res.json();
+      localStorage.setItem('reflect_admin_token', token);
+      checkAuth();
+    } else {
+      errEl.textContent = 'Невірний пароль';
+      document.getElementById('login-password').value = '';
+      document.getElementById('login-password').focus();
+    }
+  }
+
+  checkAuth();
 </script>
 </body>
 </html>

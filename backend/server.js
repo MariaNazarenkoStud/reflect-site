@@ -13,11 +13,17 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // всі маршрути API
+app.use('/api/auth',    require('./routes/auth'));
 app.use('/api/brand',   require('./routes/brand'));
 app.use('/api/colors',  require('./routes/colors'));
 app.use('/api/mockups', require('./routes/mockups'));
 app.use('/api/slogans', require('./routes/slogans'));
 app.use('/api/orders',  require('./routes/orders'));
+
+// /admin → адмін-панель
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/admin.html'));
+});
 
 // для решти шляхів — index.html
 app.get('*', (req, res) => {
