@@ -1,16 +1,15 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+const express  = require('express');
+const cors     = require('cors');
+const path     = require('path');
+const migrate  = require('./migrate');
 
-const app = express();
+const app  = express();
 const PORT = process.env.PORT || 5173;
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'brand.db');
 
-// щоб читати JSON з запитів
 app.use(express.json());
 app.use(cors());
 
-// роздаємо статичні файли фронтенду (html, css, картинки)
+// роздаємо статичні файли фронтенду
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // всі маршрути API
@@ -18,14 +17,23 @@ app.use('/api/brand',   require('./routes/brand'));
 app.use('/api/colors',  require('./routes/colors'));
 app.use('/api/mockups', require('./routes/mockups'));
 app.use('/api/slogans', require('./routes/slogans'));
+app.use('/api/orders',  require('./routes/orders'));
 
-// для будь-якого іншого шляху — повертаємо index.html
+// для решти шляхів — index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Re:flect server running at http://localhost:${PORT}`);
-});
+// спочатку мігруємо базу, потім запускаємо сервер
+migrate()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Re:flect running at http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Startup error:', err.message);
+    process.exit(1);
+  });
 
 module.exports = app;

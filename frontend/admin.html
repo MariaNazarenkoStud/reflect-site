@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,13 +10,12 @@
     :root { --pink:#FE6077; --lime:#B3D042; --cream:#F6E9D8; --navy:#154A61; --white:#FFFFFF; --gray:#f0f0f0; }
     body { font-family: 'Nunito', sans-serif; background: #f5f5f5; color: var(--navy); }
 
-    /* бокова панель */
     .layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
     aside {
       background: var(--navy); color: var(--cream); padding: 32px 20px;
-      position: sticky; top: 0; height: 100vh;
+      position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column;
     }
-    .aside-logo { font-size: 1.4rem; font-weight: 900; margin-bottom: 8px; }
+    .aside-logo { font-size: 1.4rem; font-weight: 900; margin-bottom: 4px; }
     .aside-logo span { color: var(--pink); }
     .aside-sub { font-size: 0.7rem; font-weight: 800; opacity: 0.4; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 32px; }
     aside nav a {
@@ -25,9 +24,10 @@
       font-size: 0.9rem; margin-bottom: 4px; opacity: 0.6; transition: all 0.2s;
     }
     aside nav a:hover, aside nav a.active { opacity: 1; background: rgba(255,255,255,0.1); }
+    .aside-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 12px 0; }
+    .aside-section-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; opacity: 0.3; padding: 4px 14px; margin-bottom: 4px; }
     .aside-back { margin-top: auto; display: block; padding: 10px 14px; border-radius: 12px; color: var(--lime); text-decoration: none; font-weight: 800; font-size: 0.85rem; opacity: 0.8; }
 
-    /* основний контент */
     main { padding: 40px 48px; }
     .page { display: none; }
     .page.active { display: block; }
@@ -35,7 +35,63 @@
     h1 { font-size: 2rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 8px; }
     .page-sub { font-size: 0.85rem; font-weight: 800; opacity: 0.45; margin-bottom: 32px; }
 
-    /* картки з даними */
+    /* статистика */
+    .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 32px; }
+    .stat-card {
+      background: var(--white); border-radius: 16px; padding: 20px 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05); text-align: center;
+    }
+    .stat-num { font-size: 2rem; font-weight: 900; line-height: 1; }
+    .stat-label { font-size: 0.7rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; opacity: 0.45; margin-top: 4px; }
+    .stat-card.pending .stat-num   { color: #f59e0b; }
+    .stat-card.confirmed .stat-num { color: var(--navy); }
+    .stat-card.progress .stat-num  { color: #6366f1; }
+    .stat-card.done .stat-num      { color: #22c55e; }
+    .stat-card.rejected .stat-num  { color: var(--pink); }
+
+    /* фільтр */
+    .filter-row { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 7px 16px; border-radius: 100px; border: 2px solid var(--gray);
+      background: transparent; font-family: inherit; font-weight: 900; font-size: 0.78rem;
+      cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px;
+    }
+    .filter-btn:hover, .filter-btn.active { background: var(--navy); color: var(--cream); border-color: var(--navy); }
+
+    /* таблиця замовлень */
+    .orders-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+    .orders-table th {
+      text-align: left; font-size: 0.7rem; font-weight: 900; letter-spacing: 1.5px;
+      text-transform: uppercase; opacity: 0.45; padding: 16px 20px;
+      border-bottom: 2px solid var(--gray);
+    }
+    .orders-table td { padding: 14px 20px; font-size: 0.88rem; font-weight: 800; border-bottom: 1px solid var(--gray); vertical-align: middle; }
+    .orders-table tr:last-child td { border-bottom: none; }
+    .orders-table tr:hover td { background: #f9f9f9; }
+
+    .status-badge {
+      display: inline-block; padding: 4px 12px; border-radius: 100px;
+      font-size: 0.68rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .status-pending     { background: #fef3c7; color: #92400e; }
+    .status-confirmed   { background: #dbeafe; color: #1e40af; }
+    .status-in_progress { background: #ede9fe; color: #4c1d95; }
+    .status-done        { background: #dcfce7; color: #14532d; }
+    .status-rejected    { background: #ffe4e6; color: #9f1239; }
+
+    .status-select {
+      border: 2px solid var(--gray); border-radius: 8px; padding: 6px 10px;
+      font-family: inherit; font-weight: 800; font-size: 0.8rem; cursor: pointer;
+      background: var(--white); color: var(--navy); outline: none;
+    }
+    .order-detail { font-size: 0.8rem; opacity: 0.55; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn-del-sm {
+      padding: 6px 10px; border-radius: 8px; border: none; background: #ffe0e4;
+      color: var(--pink); cursor: pointer; font-size: 0.85rem; transition: background 0.2s;
+    }
+    .btn-del-sm:hover { background: var(--pink); color: var(--white); }
+
+    /* картки */
     .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 32px; }
     .card {
       background: var(--white); border-radius: 16px; padding: 20px;
@@ -57,7 +113,6 @@
     .btn-del { background: #ffe0e4; color: var(--pink); }
     .btn-del:hover { background: var(--pink); color: var(--white); }
 
-    /* форми */
     .form-box { background: var(--white); border-radius: 20px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); max-width: 560px; }
     .form-box h2 { font-size: 1.1rem; font-weight: 900; margin-bottom: 20px; }
     label { display: block; font-size: 0.8rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; opacity: 0.5; margin-bottom: 6px; margin-top: 16px; }
@@ -82,14 +137,12 @@
     }
     .btn-cancel:hover { border-color: var(--navy); }
 
-    /* список мокапів */
     .mockup-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
     .mockup-item { background: var(--white); border-radius: 16px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
     .mockup-item img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
     .mockup-item-info { padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
     .mockup-item-name { font-weight: 900; font-size: 0.85rem; }
 
-    /* сповіщення */
     .toast {
       position: fixed; bottom: 32px; right: 32px;
       background: var(--navy); color: var(--cream);
@@ -106,25 +159,59 @@
 <body>
 <div class="layout">
 
-  <!-- бокова панель -->
   <aside>
     <div class="aside-logo"><span>Re:</span>flect</div>
     <div class="aside-sub">Admin Panel</div>
     <nav>
-      <a href="#" class="active" onclick="showPage('brand', this)">🏷 Brand Info</a>
-      <a href="#" onclick="showPage('colors', this)">🎨 Colors</a>
-      <a href="#" onclick="showPage('fonts', this)">🔤 Fonts</a>
+      <div class="aside-section-label">Замовлення</div>
+      <a href="#" class="active" onclick="showPage('orders', this)">📦 Замовлення</a>
+      <hr class="aside-divider" />
+      <div class="aside-section-label">Контент сайту</div>
+      <a href="#" onclick="showPage('brand',   this)">🏷 Brand Info</a>
+      <a href="#" onclick="showPage('colors',  this)">🎨 Colors</a>
+      <a href="#" onclick="showPage('fonts',   this)">🔤 Fonts</a>
       <a href="#" onclick="showPage('mockups', this)">🖼 Mockups</a>
       <a href="#" onclick="showPage('slogans', this)">💬 Slogans</a>
     </nav>
-    <a class="aside-back" href="/">← Back to site</a>
+    <a class="aside-back" href="/">← Повернутись на сайт</a>
   </aside>
 
-  <!-- сторінки -->
   <main>
 
-    <!-- інфо бренду -->
-    <div class="page active" id="page-brand">
+    <!-- ЗАМОВЛЕННЯ -->
+    <div class="page active" id="page-orders">
+      <h1>Замовлення</h1>
+      <p class="page-sub">Управління заявками від клієнтів</p>
+
+      <div class="stats" id="order-stats"></div>
+
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterOrders('', this)">Всі</button>
+        <button class="filter-btn" onclick="filterOrders('pending', this)">Нові</button>
+        <button class="filter-btn" onclick="filterOrders('confirmed', this)">Підтверджені</button>
+        <button class="filter-btn" onclick="filterOrders('in_progress', this)">В роботі</button>
+        <button class="filter-btn" onclick="filterOrders('done', this)">Виконані</button>
+        <button class="filter-btn" onclick="filterOrders('rejected', this)">Відхилені</button>
+      </div>
+
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Клієнт</th>
+            <th>Виріб</th>
+            <th>Матеріал</th>
+            <th>Дата</th>
+            <th>Статус</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- BRAND INFO -->
+    <div class="page" id="page-brand">
       <h1>Brand Info</h1>
       <p class="page-sub">Основна інформація про бренд</p>
       <div class="form-box">
@@ -139,7 +226,7 @@
       </div>
     </div>
 
-    <!-- кольори -->
+    <!-- COLORS -->
     <div class="page" id="page-colors">
       <h1>Colors</h1>
       <p class="page-sub">Кольорова палітра бренду</p>
@@ -161,14 +248,14 @@
       </div>
     </div>
 
-    <!-- шрифти -->
+    <!-- FONTS -->
     <div class="page" id="page-fonts">
       <h1>Fonts</h1>
       <p class="page-sub">Типографіка бренду</p>
       <div class="cards" id="fonts-list"></div>
     </div>
 
-    <!-- мокапи -->
+    <!-- MOCKUPS -->
     <div class="page" id="page-mockups">
       <h1>Mockups</h1>
       <p class="page-sub">Застосування айдентики</p>
@@ -191,7 +278,7 @@
       </div>
     </div>
 
-    <!-- слогани -->
+    <!-- SLOGANS -->
     <div class="page" id="page-slogans">
       <h1>Slogans</h1>
       <p class="page-sub">Слогани бренду</p>
@@ -212,11 +299,17 @@
   </main>
 </div>
 
-<!-- сповіщення -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // перемикаємо сторінки в адмінці
+  const STATUS_LABELS = {
+    pending:     'Нова',
+    confirmed:   'Підтверджена',
+    in_progress: 'В роботі',
+    done:        'Виконана',
+    rejected:    'Відхилена',
+  };
+
   function showPage(name, link) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('aside nav a').forEach(a => a.classList.remove('active'));
@@ -232,19 +325,98 @@
     setTimeout(() => el.classList.remove('show'), 2800);
   }
 
+  // --- ORDERS ---
+  let currentFilter = '';
+
+  async function loadOrders(status = currentFilter) {
+    const url = '/api/orders' + (status ? '?status=' + status : '');
+    const [orders, stats] = await Promise.all([
+      fetch(url).then(r => r.json()),
+      fetch('/api/orders/stats').then(r => r.json()),
+    ]);
+
+    // статистика
+    document.getElementById('order-stats').innerHTML = `
+      <div class="stat-card"><div class="stat-num">${stats.total}</div><div class="stat-label">Всього</div></div>
+      <div class="stat-card pending"><div class="stat-num">${stats.pending}</div><div class="stat-label">Нових</div></div>
+      <div class="stat-card progress"><div class="stat-num">${+stats.confirmed + +stats.in_progress}</div><div class="stat-label">В процесі</div></div>
+      <div class="stat-card done"><div class="stat-num">${stats.done}</div><div class="stat-label">Виконано</div></div>
+      <div class="stat-card rejected"><div class="stat-num">${stats.rejected}</div><div class="stat-label">Відхилено</div></div>
+    `;
+
+    // таблиця
+    document.getElementById('orders-tbody').innerHTML = orders.length
+      ? orders.map(o => `
+        <tr>
+          <td style="opacity:0.4;font-size:0.78rem">#${o.id}</td>
+          <td>
+            <div style="font-weight:900">${o.name}</div>
+            <div style="font-size:0.78rem;opacity:0.5">${o.email}${o.phone ? ' · ' + o.phone : ''}</div>
+          </td>
+          <td>${productLabel(o.product_type)} × ${o.quantity}</td>
+          <td class="order-detail" title="${o.material_description}">${o.material_description}</td>
+          <td style="font-size:0.78rem;opacity:0.5;white-space:nowrap">${formatDate(o.created_at)}</td>
+          <td>
+            <select class="status-select" onchange="updateStatus(${o.id}, this.value)">
+              ${Object.keys(STATUS_LABELS).map(s =>
+                `<option value="${s}" ${s === o.status ? 'selected' : ''}>${STATUS_LABELS[s]}</option>`
+              ).join('')}
+            </select>
+          </td>
+          <td><button class="btn-del-sm" onclick="deleteOrder(${o.id})">🗑</button></td>
+        </tr>`).join('')
+      : '<tr><td colspan="7" style="text-align:center;padding:40px;opacity:0.4">Замовлень немає</td></tr>';
+  }
+
+  function filterOrders(status, btn) {
+    currentFilter = status;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadOrders(status);
+  }
+
+  async function updateStatus(id, status) {
+    await fetch('/api/orders/' + id, {
+      method: 'PUT', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
+    toast('Статус оновлено ✓');
+    loadOrders();
+  }
+
+  async function deleteOrder(id) {
+    if (!confirm('Видалити замовлення #' + id + '?')) return;
+    await fetch('/api/orders/' + id, { method: 'DELETE' });
+    toast('Видалено', 'error');
+    loadOrders();
+  }
+
+  function productLabel(type) {
+    const map = { bag:'Сумка', backpack:'Рюкзак', tote:'Шопер', accessory:'Аксесуар', apparel:'Одяг', other:'Інше' };
+    return map[type] || type;
+  }
+
+  function formatDate(iso) {
+    return new Date(iso).toLocaleDateString('uk-UA', { day:'2-digit', month:'short', year:'numeric' });
+  }
+
   // --- BRAND ---
   async function loadBrand() {
     const d = await fetch('/api/brand').then(r => r.json());
-    document.getElementById('b-name').value    = d.info.name;
-    document.getElementById('b-tagline').value = d.info.tagline;
-    document.getElementById('b-about').value   = d.info.about;
+    document.getElementById('b-name').value    = d.info?.name    || '';
+    document.getElementById('b-tagline').value = d.info?.tagline || '';
+    document.getElementById('b-about').value   = d.info?.about   || '';
   }
   async function saveBrand() {
     await fetch('/api/brand', {
       method: 'PUT', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ name: document.getElementById('b-name').value, tagline: document.getElementById('b-tagline').value, about: document.getElementById('b-about').value })
+      body: JSON.stringify({
+        name:    document.getElementById('b-name').value,
+        tagline: document.getElementById('b-tagline').value,
+        about:   document.getElementById('b-about').value,
+      })
     });
-    toast('Brand info saved ✓');
+    toast('Збережено ✓');
   }
 
   // --- COLORS ---
@@ -259,24 +431,21 @@
         </div>
         <div class="card-actions">
           <button class="btn-icon btn-edit" onclick="editColor(${c.id},'${c.name}','${c.hex}','${c.label||''}')">✏️</button>
-          <button class="btn-icon btn-del" onclick="deleteColor(${c.id})">🗑</button>
+          <button class="btn-icon btn-del"  onclick="deleteColor(${c.id})">🗑</button>
         </div>
       </div>`).join('');
   }
   function editColor(id, name, hex, label) {
-    document.getElementById('c-id').value = id;
-    document.getElementById('c-name').value = name;
-    document.getElementById('c-hex').value = hex;
+    document.getElementById('c-id').value    = id;
+    document.getElementById('c-name').value  = name;
+    document.getElementById('c-hex').value   = hex;
     document.getElementById('c-hex-picker').value = hex;
     document.getElementById('c-label').value = label;
     document.getElementById('color-form-title').textContent = 'Edit color';
     document.getElementById('color-form').scrollIntoView({ behavior: 'smooth' });
   }
   function resetColorForm() {
-    document.getElementById('c-id').value = '';
-    document.getElementById('c-name').value = '';
-    document.getElementById('c-hex').value = '';
-    document.getElementById('c-label').value = '';
+    ['c-id','c-name','c-hex','c-label'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('color-form-title').textContent = 'Add color';
   }
   async function saveColor() {
@@ -299,7 +468,6 @@
     toast('Deleted', 'error');
     loadColors();
   }
-  // синхронізуємо пікер і текстове поле
   document.getElementById('c-hex-picker').addEventListener('input', e => { document.getElementById('c-hex').value = e.target.value; });
   document.getElementById('c-hex').addEventListener('input', e => {
     if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) document.getElementById('c-hex-picker').value = e.target.value;
@@ -307,8 +475,8 @@
 
   // --- FONTS ---
   async function loadFonts() {
-    const fonts = await fetch('/api/brand').then(r => r.json()).then(d => d.fonts);
-    document.getElementById('fonts-list').innerHTML = fonts.map(f => `
+    const d = await fetch('/api/brand').then(r => r.json());
+    document.getElementById('fonts-list').innerHTML = (d.fonts || []).map(f => `
       <div class="card">
         <div class="card-info">
           <div class="card-name">${f.name}</div>
@@ -355,13 +523,13 @@
           <div class="card-sub">${s.is_active ? '✅ Active' : '⛔ Hidden'}</div>
         </div>
         <div class="card-actions">
-          <button class="btn-icon btn-edit" onclick="toggleSlogan(${s.id}, ${s.is_active})">${s.is_active ? '🙈' : '👁'}</button>
-          <button class="btn-icon btn-del" onclick="deleteSlogan(${s.id})">🗑</button>
+          <button class="btn-icon btn-edit" onclick="toggleSlogan(${s.id},${s.is_active})">${s.is_active ? '🙈' : '👁'}</button>
+          <button class="btn-icon btn-del"  onclick="deleteSlogan(${s.id})">🗑</button>
         </div>
       </div>`).join('');
   }
   async function addSlogan() {
-    const text = document.getElementById('s-text').value;
+    const text      = document.getElementById('s-text').value;
     const is_active = document.getElementById('s-active').value;
     await fetch('/api/slogans', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ text, is_active }) });
     toast('Slogan added ✓');
@@ -369,9 +537,10 @@
     loadSlogans();
   }
   async function toggleSlogan(id, current) {
+    const s = await fetch('/api/slogans/' + id).then(r => r.json()).catch(() => null);
     await fetch('/api/slogans/' + id, {
       method: 'PUT', headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ text: '', is_active: current ? 0 : 1 })
+      body: JSON.stringify({ text: s?.text || ' ', is_active: current ? 0 : 1 }),
     });
     loadSlogans();
   }
@@ -382,17 +551,12 @@
     loadSlogans();
   }
 
-  // завантажуємо потрібну секцію при переключенні
   function loadPage(name) {
-    if (name === 'brand')   loadBrand();
-    if (name === 'colors')  loadColors();
-    if (name === 'fonts')   loadFonts();
-    if (name === 'mockups') loadMockups();
-    if (name === 'slogans') loadSlogans();
+    const map = { orders: loadOrders, brand: loadBrand, colors: loadColors, fonts: loadFonts, mockups: loadMockups, slogans: loadSlogans };
+    map[name]?.();
   }
 
-  // стартуємо з першої сторінки
-  loadBrand();
+  loadOrders();
 </script>
 </body>
 </html>

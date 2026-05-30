@@ -1,0 +1,7 @@
+backend/node_modules
+backend/*.db
+backend/*.db.lock
+backend/brand.json
+node_modules
+*.log
+.git

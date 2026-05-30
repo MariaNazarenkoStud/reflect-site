@@ -1,40 +1,42 @@
 const express = require('express');
-const router = express.Router();
-const db = require('../db');
+const router  = express.Router();
+const db      = require('../db');
 
-// усі кольори
-router.get('/', (req, res) => {
-  res.json(db.prepare('SELECT * FROM colors').all());
+router.get('/', async (req, res) => {
+  const { rows } = await db.query('SELECT * FROM colors ORDER BY id');
+  res.json(rows);
 });
 
-// один колір
-router.get('/:id', (req, res) => {
-  const row = db.prepare('SELECT * FROM colors WHERE id = ?').get(req.params.id);
-  if (!row) return res.status(404).json({ error: 'not found' });
-  res.json(row);
+router.get('/:id', async (req, res) => {
+  const { rows } = await db.query('SELECT * FROM colors WHERE id=$1', [req.params.id]);
+  if (!rows[0]) return res.status(404).json({ error: 'not found' });
+  res.json(rows[0]);
 });
 
-// додати колір
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const { name, hex, label } = req.body;
   if (!name || !hex) return res.status(400).json({ error: 'name and hex are required' });
-  const result = db.prepare('INSERT INTO colors (name, hex, label) VALUES (?, ?, ?)').run(name, hex, label);
-  res.status(201).json({ id: result.lastInsertRowid });
+  const { rows } = await db.query(
+    'INSERT INTO colors (name, hex, label) VALUES ($1, $2, $3) RETURNING id',
+    [name, hex, label]
+  );
+  res.status(201).json({ id: rows[0].id });
 });
 
-// оновити колір
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   const { name, hex, label } = req.body;
   if (!name || !hex) return res.status(400).json({ error: 'name and hex are required' });
-  const result = db.prepare('UPDATE colors SET name=?, hex=?, label=? WHERE id=?').run(name, hex, label, req.params.id);
-  if (result.changes === 0) return res.status(404).json({ error: 'not found' });
+  const { rowCount } = await db.query(
+    'UPDATE colors SET name=$1, hex=$2, label=$3 WHERE id=$4',
+    [name, hex, label, req.params.id]
+  );
+  if (rowCount === 0) return res.status(404).json({ error: 'not found' });
   res.json({ ok: true });
 });
 
-// видалити колір
-router.delete('/:id', (req, res) => {
-  const result = db.prepare('DELETE FROM colors WHERE id = ?').run(req.params.id);
-  if (result.changes === 0) return res.status(404).json({ error: 'not found' });
+router.delete('/:id', async (req, res) => {
+  const { rowCount } = await db.query('DELETE FROM colors WHERE id=$1', [req.params.id]);
+  if (rowCount === 0) return res.status(404).json({ error: 'not found' });
   res.json({ ok: true });
 });
 

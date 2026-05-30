@@ -1,0 +1,35 @@
+services:
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       reflect_db
+      POSTGRES_USER:     reflect_user
+      POSTGRES_PASSWORD: reflect_pass
+    ports:
+      - "5488:5432"   # зовнішній 5488, щоб не конфліктувати з іншими БД
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reflect_user -d reflect_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      PORT:         5173
+      DATABASE_URL: postgresql://reflect_user:reflect_pass@db:5432/reflect_db
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./frontend/images:/app/frontend/images   # зберігаємо завантажені фото
+
+volumes:
+  pgdata:
