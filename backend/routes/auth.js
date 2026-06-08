@@ -10,7 +10,11 @@ const SESSION_TOKEN = crypto.randomBytes(32).toString('hex');
 // POST /api/auth/login
 router.post('/login', (req, res) => {
   const { password } = req.body;
-  if (password === ADMIN_PASSWORD) {
+  const inputBuf    = Buffer.from(password || '');
+  const secretBuf   = Buffer.from(ADMIN_PASSWORD);
+  const match = inputBuf.length === secretBuf.length &&
+                crypto.timingSafeEqual(inputBuf, secretBuf);
+  if (match) {
     res.json({ token: SESSION_TOKEN });
   } else {
     res.status(401).json({ error: 'Invalid password' });
