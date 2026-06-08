@@ -384,7 +384,7 @@
 <body>
 
 <!-- NAV -->
-<nav>
+<nav aria-label="Головна навігація">
   <a class="nav-logo" href="/">RE:FLECT</a>
   <ul>
     <li><a href="#collection">Колекція</a></li>
@@ -397,6 +397,8 @@
     <a class="nav-admin" href="/admin">Адмін</a>
   </div>
 </nav>
+
+<main>
 
 <!-- HERO -->
 <section id="hero">
@@ -643,22 +645,22 @@
       <form class="order-form" id="order-form" onsubmit="submitOrder(event)">
         <div class="form-row">
           <div class="form-group">
-            <label>Ім'я *</label>
-            <input type="text" name="name" placeholder="Олена" required />
+            <label for="order-name">Ім'я *</label>
+            <input id="order-name" type="text" name="name" placeholder="Олена" required />
           </div>
           <div class="form-group">
-            <label>Email *</label>
-            <input type="email" name="email" placeholder="hello@mail.com" required />
+            <label for="order-email">Email *</label>
+            <input id="order-email" type="email" name="email" placeholder="hello@mail.com" required />
           </div>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Телефон</label>
-            <input type="tel" name="phone" placeholder="+38 050 000 00 00" />
+            <label for="order-phone">Телефон</label>
+            <input id="order-phone" type="tel" name="phone" placeholder="+38 050 000 00 00" />
           </div>
           <div class="form-group">
-            <label>Тип виробу *</label>
-            <select name="product_type" required>
+            <label for="order-product">Тип виробу *</label>
+            <select id="order-product" name="product_type" required>
               <option value="">Обери...</option>
               <option value="bag">Сумка / Торба</option>
               <option value="backpack">Рюкзак</option>
@@ -670,17 +672,17 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Опис матеріалу *</label>
-          <textarea name="material_description" placeholder="Наприклад: рекламний банер 3×6м, поліестер, без пошкоджень..." required></textarea>
+          <label for="order-material">Опис матеріалу *</label>
+          <textarea id="order-material" name="material_description" placeholder="Наприклад: рекламний банер 3×6м, поліестер, без пошкоджень..." required></textarea>
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Кількість одиниць</label>
-            <input type="number" name="quantity" min="1" value="1" />
+            <label for="order-quantity">Кількість одиниць</label>
+            <input id="order-quantity" type="number" name="quantity" min="1" value="1" />
           </div>
           <div class="form-group">
-            <label>Додаткові побажання</label>
-            <input type="text" name="notes" placeholder="Колір, розмір, деталі..." />
+            <label for="order-notes">Додаткові побажання</label>
+            <input id="order-notes" type="text" name="notes" placeholder="Колір, розмір, деталі..." />
           </div>
         </div>
         <button type="submit" class="order-submit">Надіслати заявку →</button>
@@ -691,6 +693,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <!-- FOOTER -->
 <footer>
