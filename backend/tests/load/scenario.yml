@@ -1,0 +1,58 @@
+config:
+  target: "http://localhost:5173"
+  phases:
+    - duration: 30
+      arrivalRate: 3
+      name: "Warm up"
+    - duration: 60
+      arrivalRate: 15
+      name: "Load"
+    - duration: 15
+      arrivalRate: 30
+      name: "Peak"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Browse brand content"
+    weight: 70
+    flow:
+      - get:
+          url: "/api/brand"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/api/colors"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/api/mockups"
+          expect:
+            - statusCode: 200
+      - get:
+          url: "/api/slogans"
+          expect:
+            - statusCode: 200
+
+  - name: "Submit recycling order"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/orders"
+          json:
+            name: "Load Test User"
+            email: "loadtest@example.com"
+            material_description: "Test banner 2x3m polyester"
+            product_type: "bag"
+            quantity: 1
+          expect:
+            - statusCode: 201
+
+  - name: "Get order statistics"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/orders/stats"
+          expect:
+            - statusCode: 200
